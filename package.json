@@ -26,6 +26,8 @@
     "scripts"
   ],
   "dependencies": {
+    "@umm/singleton": "github:umm-projects/singleton",
+    "@umm/unirx": "github:umm-projects/unirx",
     "glob": "^7.1.2",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
