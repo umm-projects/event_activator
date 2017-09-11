@@ -1,6 +1,6 @@
 {
   "name": "@umm/event_activator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Manage global event activation",
   "homepage": "https://github.com/umm-projects/event_activator",
   "bugs": {
