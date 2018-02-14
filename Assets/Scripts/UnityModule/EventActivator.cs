@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -50,7 +49,7 @@ namespace UnityModule {
 
     public static class ComponentExtension {
 
-        [Obsolete("Please use Component.RegisterEventActivationHandler() instead of this extension method.")]
+        [System.Obsolete("Please use Component.RegisterEventActivationHandler() instead of this extension method.")]
         public static void SetEventActivation(this UIBehaviour self) {
             self.RegisterEventActivationHandler();
         }
