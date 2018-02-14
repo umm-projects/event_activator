@@ -1,6 +1,11 @@
-﻿using UniRx;
+﻿using System;
+using System.Linq;
+using UniRx;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace UnityModule {
 
@@ -43,15 +48,39 @@ namespace UnityModule {
 
     }
 
-    public static class UIBehaviourExtension {
+    public static class ComponentExtension {
+
+        [Obsolete("Please use Component.RegisterEventActivationHandler() instead of this extension method.")]
+        public static void SetEventActivation(this UIBehaviour self) {
+            self.RegisterEventActivationHandler();
+        }
 
         /// <summary>
-        /// UnityEngine.EventSystems.UIBehaviour にイベントの有効/無効処理を自動で仕込みます
+        /// UnityEngine.Component にイベントの有効/無効処理を自動で仕込みます
         /// </summary>
-        /// <param name="self">UIBehaviour のインスタンス</param>
-        public static void SetEventActivation(this UIBehaviour self) {
-            EventActivator.Instance.OnActivateAsObservable().Subscribe(_ => self.GetComponent<Graphic>().raycastTarget = true).AddTo(self);
-            EventActivator.Instance.OnDeactivateAsObservable().Subscribe(_ => self.GetComponent<Graphic>().raycastTarget = false).AddTo(self);
+        /// <param name="self">Component のインスタンス</param>
+        /// <param name="includeChildren">子孫 Component の有効無効状態を設定するかどうか</param>
+        public static void RegisterEventActivationHandler(this Component self, bool includeChildren = true) {
+            EventActivator.Instance.OnActivateAsObservable().Subscribe(_ => self.HandleEventActiovation(true, includeChildren)).AddTo(self);
+            EventActivator.Instance.OnDeactivateAsObservable().Subscribe(_ => self.HandleEventActiovation(false, includeChildren)).AddTo(self);
+        }
+
+        /// <summary>
+        /// UnityEngine.Component のイベント有効無効状態を切り替えます
+        /// </summary>
+        /// <param name="self">Component のインスタンス</param>
+        /// <param name="activation">有効無効の状態</param>
+        /// <param name="includeChildren">子孫 Component の有効無効状態を設定するかどうか</param>
+        public static void HandleEventActiovation(this Component self, bool activation, bool includeChildren = true) {
+            if (includeChildren) {
+                self.gameObject.GetComponentsInChildren<Graphic>().ToList().ForEach(x => x.raycastTarget = activation);
+                self.gameObject.GetComponentsInChildren<Collider>().ToList().ForEach(x => x.enabled = activation);
+                self.gameObject.GetComponentsInChildren<Collider2D>().ToList().ForEach(x => x.enabled = activation);
+            } else {
+                self.gameObject.GetComponents<Graphic>().ToList().ForEach(x => x.raycastTarget = activation);
+                self.gameObject.GetComponents<Collider>().ToList().ForEach(x => x.enabled = activation);
+                self.gameObject.GetComponents<Collider2D>().ToList().ForEach(x => x.enabled = activation);
+            }
         }
 
     }

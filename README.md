@@ -1,18 +1,20 @@
-# What?
+# EventActivator
 
 * アプリケーション全体のイベント有効状態を管理するためのクラスを提供します。
 
-# Why?
+## Requirement
 
-* 個別のコンポーネント単位で管理していくと状態管理が複雑になってしまうため。
+* [UniRx](https://github.com/neuecc/unirx) ([umm版](https://github.com/umm-projects/unirx))
 
-# Install
+## Install
 
 ```shell
-$ npm install github:umm-projects/event_activator
+npm install github:umm-projects/event_activator
 ```
 
-# Usage
+## Usage
+
+### 個別の実装
 
 ```csharp
 using UnityEngine;
@@ -48,25 +50,28 @@ public class Sample : MonoBehaviour {
 * ボタンクリック時など、排他的なイベント実行を行いたい場合に `Deactivate()` メソッドを呼び出します。
 * 次画面に遷移した場合や、次のボタンが表示されるタイミングなどで `Activate()` メソッドを呼び出し、無効状態を解除します。
 
+### 一括設定
+
 ```csharp
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityModule;
+using UnityModule; // この using がないと Extension Method が設定されません
 
-public class Sample : UIBehaviour {
-    protected override void Start() {
-        base.Start();
-        this.SetEventActivation();
+public class Sample : MonoBehaviour {
+    private void Start() {
+        this.RegisterEventActivationHandler();
     }
 }
 ```
 
-* `UnityEngine.EventSystems.UIBehaviour` を継承しているクラス向けに `SetEventActivation()` という拡張メソッドを提供しています。
-* 呼び出すと、 `OnActivateAsObservable()` と `OnDeactivateAsObservable()` を自動的に購読し、同一 GameObject にアタッチされている `UnityEngine.UI.Graphic` の `raycastTarget` のオンオフを切り替える実装を仕込みます。
+* `UnityEngine.Component` 向けに `RegisterEventActivationHandler()` という拡張メソッドを提供しています。
+* 呼び出すと、 `OnActivateAsObservable()` と `OnDeactivateAsObservable()` を自動的に購読し、同一 GameObject にアタッチされている `UnityEngine.UI.Graphic` の `raycastTarget` や `UnityEngine.Collider`, `UnityEngine.Collider2D` の `enabled` のオンオフを切り替える実装を仕込みます。
+* 第一引数に真偽値を渡すと子孫 Component を含むかどうかを変更可能です。
+  * default: `true`
+  * `false` を渡すと、自身の GameObject のみを対象とします。
 
-# License
+## License
 
-Copyright (c) 2017 Tetsuya Mori
+Copyright (c) 2017-2018 Tetsuya Mori
 
 Released under the MIT license, see [LICENSE.txt](LICENSE.txt)
 
