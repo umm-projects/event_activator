@@ -69,6 +69,22 @@ public class Sample : MonoBehaviour {
   * default: `true`
   * `false` を渡すと、自身の GameObject のみを対象とします。
 
+### 型の制約
+
+```csharp
+using UnityEngine;
+using UnityModule; // この using がないと Extension Method が設定されません
+
+public class Sample : MonoBehaviour {
+    private void Start() {
+        this.RegisterEventActivationHandler<BoxCollider2D>();
+    }
+}
+```
+
+* `UnityEngine.UI.Graphic`, `UnityEngine.Collider`, `UnityEngine.Collider2D` の何れかの継承型に限って有効無効を操作します。
+* 「とにかく何らかの 2D Collider を On/Off」という場合には `this.RegisterEventActivationHandler<Collider2D>()` とすると良いでしょう。
+
 ## License
 
 Copyright (c) 2017-2018 Tetsuya Mori
