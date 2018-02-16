@@ -65,20 +65,89 @@ namespace UnityModule {
         }
 
         /// <summary>
+        /// UnityEngine.Component にイベントの有効/無効処理を自動で仕込みます
+        /// </summary>
+        /// <param name="self">Component のインスタンス</param>
+        /// <param name="includeChildren">子孫 Component の有効無効状態を設定するかどうか</param>
+        /// <typeparam name="T">操作対象の Graphic/Collider/Collider2D の型</typeparam>
+        public static void RegisterEventActivationHandler<T>(this Component self, bool includeChildren = true) where T : Component {
+            EventActivator.Instance.OnActivateAsObservable().Subscribe(_ => self.HandleEventActiovation<T>(true, includeChildren)).AddTo(self);
+            EventActivator.Instance.OnDeactivateAsObservable().Subscribe(_ => self.HandleEventActiovation<T>(false, includeChildren)).AddTo(self);
+        }
+
+        /// <summary>
         /// UnityEngine.Component のイベント有効無効状態を切り替えます
         /// </summary>
         /// <param name="self">Component のインスタンス</param>
         /// <param name="activation">有効無効の状態</param>
         /// <param name="includeChildren">子孫 Component の有効無効状態を設定するかどうか</param>
         public static void HandleEventActiovation(this Component self, bool activation, bool includeChildren = true) {
+            self.HandleGraphicEventActiovation<Graphic>(activation, includeChildren);
+            self.HandleColliderEventActiovation<Collider>(activation, includeChildren);
+            self.HandleCollider2DEventActiovation<Collider2D>(activation, includeChildren);
+        }
+
+        /// <summary>
+        /// UnityEngine.Component のイベント有効無効状態を切り替えます
+        /// </summary>
+        /// <param name="self">Component のインスタンス</param>
+        /// <param name="activation">有効無効の状態</param>
+        /// <param name="includeChildren">子孫 Component の有効無効状態を設定するかどうか</param>
+        /// <typeparam name="T">操作対象の Graphic/Collider/Collider2D の型</typeparam>
+        public static void HandleEventActiovation<T>(this Component self, bool activation, bool includeChildren = true) where T : Component {
+            if (typeof(T).IsSubclassOf(typeof(Graphic))) {
+                self.HandleGraphicEventActiovation<T>(activation, includeChildren);
+            }
+            if (typeof(T).IsSubclassOf(typeof(Collider))) {
+                self.HandleColliderEventActiovation<T>(activation, includeChildren);
+            }
+            if (typeof(T).IsSubclassOf(typeof(Collider2D))) {
+                self.HandleCollider2DEventActiovation<T>(activation, includeChildren);
+            }
+        }
+
+        /// <summary>
+        /// UnityEngine.Component の Graphic 系クラスに関するイベント有効無効状態を切り替えます
+        /// </summary>
+        /// <param name="self">Component のインスタンス</param>
+        /// <param name="activation">有効無効の状態</param>
+        /// <param name="includeChildren">子孫 Component の有効無効状態を設定するかどうか</param>
+        /// <typeparam name="T">操作対象の Graphic/Collider/Collider2D の型</typeparam>
+        public static void HandleGraphicEventActiovation<T>(this Component self, bool activation, bool includeChildren = true) where T : Component {
             if (includeChildren) {
-                self.gameObject.GetComponentsInChildren<Graphic>().ToList().ForEach(x => x.raycastTarget = activation);
-                self.gameObject.GetComponentsInChildren<Collider>().ToList().ForEach(x => x.enabled = activation);
-                self.gameObject.GetComponentsInChildren<Collider2D>().ToList().ForEach(x => x.enabled = activation);
+                self.gameObject.GetComponentsInChildren<T>().Cast<Graphic>().ToList().ForEach(x => x.raycastTarget = activation);
             } else {
-                self.gameObject.GetComponents<Graphic>().ToList().ForEach(x => x.raycastTarget = activation);
-                self.gameObject.GetComponents<Collider>().ToList().ForEach(x => x.enabled = activation);
-                self.gameObject.GetComponents<Collider2D>().ToList().ForEach(x => x.enabled = activation);
+                self.gameObject.GetComponents<T>().Cast<Graphic>().ToList().ForEach(x => x.raycastTarget = activation);
+            }
+        }
+
+        /// <summary>
+        /// UnityEngine.Component の Collider 系クラスに関するイベント有効無効状態を切り替えます
+        /// </summary>
+        /// <param name="self">Component のインスタンス</param>
+        /// <param name="activation">有効無効の状態</param>
+        /// <param name="includeChildren">子孫 Component の有効無効状態を設定するかどうか</param>
+        /// <typeparam name="T">操作対象の Graphic/Collider/Collider2D の型</typeparam>
+        public static void HandleColliderEventActiovation<T>(this Component self, bool activation, bool includeChildren = true) where T : Component {
+            if (includeChildren) {
+                self.gameObject.GetComponentsInChildren<T>().Cast<Collider>().ToList().ForEach(x => x.enabled = activation);
+            } else {
+                self.gameObject.GetComponents<T>().Cast<Collider>().ToList().ForEach(x => x.enabled = activation);
+            }
+        }
+
+        /// <summary>
+        /// UnityEngine.Component の Collider2D 系クラスに関するイベント有効無効状態を切り替えます
+        /// </summary>
+        /// <param name="self">Component のインスタンス</param>
+        /// <param name="activation">有効無効の状態</param>
+        /// <param name="includeChildren">子孫 Component の有効無効状態を設定するかどうか</param>
+        /// <typeparam name="T">操作対象の Graphic/Collider/Collider2D の型</typeparam>
+        public static void HandleCollider2DEventActiovation<T>(this Component self, bool activation, bool includeChildren = true) where T : Component {
+            if (includeChildren) {
+                self.gameObject.GetComponentsInChildren<T>().Cast<Collider2D>().ToList().ForEach(x => x.enabled = activation);
+            } else {
+                self.gameObject.GetComponents<T>().Cast<Collider2D>().ToList().ForEach(x => x.enabled = activation);
             }
         }
 
