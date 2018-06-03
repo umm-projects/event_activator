@@ -1,0 +1,11 @@
+{
+    "name": "umm@event_activator",
+    "references": [
+        "umm@singleton",
+        "umm@unirx"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
