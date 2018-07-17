@@ -4,12 +4,12 @@
 
 ## Requirement
 
-* [UniRx](https://github.com/neuecc/unirx) ([umm版](https://github.com/umm-projects/unirx))
+* [UniRx](https://github.com/neuecc/unirx) ([umm版](https://github.com/umm/unirx))
 
 ## Install
 
 ```shell
-npm install github:umm-projects/event_activator
+npm install github:umm/event_activator
 ```
 
 ## Usage
