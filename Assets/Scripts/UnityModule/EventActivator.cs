@@ -46,6 +46,14 @@ namespace UnityModule {
             return this.subjectActivation.Where(x => !x).AsUnitObservable();
         }
 
+        /// <summary>
+        /// 有効か無効かを返す
+        /// </summary>
+        /// <returns>有効か無効かの状態</returns>
+        public bool IsActive() {
+            return this.subjectActivation.Value;
+        }
+
     }
 
     public static class ComponentExtension {
