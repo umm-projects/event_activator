@@ -50,7 +50,7 @@ namespace UnityModule {
         /// 有効か無効かを返す
         /// </summary>
         /// <returns>有効か無効かの状態</returns>
-        public bool IsActivated() {
+        public bool IsActive() {
             return this.subjectActivation.Value;
         }
 
