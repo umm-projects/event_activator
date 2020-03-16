@@ -1,11 +1,16 @@
 {
     "name": "umm@event_activator",
     "references": [
-        "umm@singleton",
-        "umm@unirx"
+        "GUID:7a5ecc0cfc32a4cc6a4811403f44564f",
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
