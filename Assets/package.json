@@ -1,0 +1,23 @@
+{
+  "name": "dev.upm-packages.event-activator",
+  "displayName": "Event Activator",
+  "version": "1.5.0",
+  "unity": "2019.3",
+  "description": "Manage global event activation",
+  "author": {
+    "name": "Tetsuya Mori",
+    "url": "https://me.monry.dev/",
+    "email": "monry84@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": [],
+  "category": "",
+  "dependencies": {
+    "dev.upm-packages.singleton": "1.3.1",
+    "jp.cysharp.unirx": "7.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umm/event_activator"
+  }
+}
